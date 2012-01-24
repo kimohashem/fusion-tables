@@ -30,11 +30,10 @@ module GData
           @name = options[:name]
         end
 
-
         # Sets up data types from google
         #
         def describe
-          GData::Client::FusionTables::Data.parse(@client.sql_get("DESCRIBE #{@id}")).body
+          @client.execute "DESCRIBE #{@id}"
         end
                 
         # Runs select and returns data obj
@@ -46,14 +45,15 @@ module GData
         # use columns=ROWID to select row ids
         #
         def select columns="*", conditions=nil
-          sql = "SELECT #{columns} FROM #{@id} #{conditions}"
-          GData::Client::FusionTables::Data.parse(@client.sql_get(sql)).body
+          @client.execute "SELECT #{columns} FROM #{@id} #{conditions}"
         end
         
         # Returns a count of rows. SQL conditions optional
         #
+        # Note: handles odd FT response: when table has 0 rows, returns empty array.
         def count conditions=nil
-          select("count()", conditions).first.values.first.to_i
+          result = select("count()", conditions)
+          result.empty? ? 0 : result.first[:"count()"].to_i          
         end
         
         
@@ -66,7 +66,8 @@ module GData
         # Fields are escaped and formatted for FT based on type
         #
         def insert data
-          
+          data = [data] unless data.respond_to?(:to_ary)
+
           # encode values to insert
           data = encode data
           
@@ -74,7 +75,7 @@ module GData
           chunk = ""
           data.each_with_index do |d,i|            
             chunk << "INSERT INTO #{@id} (#{ d.keys.join(",") }) VALUES (#{ d.values.join(",") });"
-            if (i+1) % 500 == 0 || (i+1) == data.size
+            if (i+1) % 10 == 0 || (i+1) == data.size
               begin
                 @client.sql_post(chunk)
                 chunk = ""
@@ -83,28 +84,25 @@ module GData
               end  
             end  
           end
-        end                
+        end
+                        
 
-        # Runs update on rows and return data obj
-        # No bulk update, so may aswell drop table and start again
-        #
-        # TODO: FIXME
-        #
-        #def update row_id, data          
-        #  data = encode([data]).first
-        #  data = data.to_a.map{|x| x.join("=")}.join(", ")
-        #  
-        #  sql = "UPDATE #{@id} SET #{data} WHERE ROWID = #{row_id}"
-        #  GData::Client::FusionTables::Data.parse(@client.sql_post(sql)).body
-        #end
-        
-        # delete row
-        # no bulk delete so may aswell drop table and start again
-        def delete row_id
-          sql = "DELETE FROM #{@id} WHERE rowid='#{row_id}'"
-          GData::Client::FusionTables::Data.parse(@client.sql_post(sql)).body
+        # Runs update on row specified and return data obj
+        def update row_id, data          
+          data = encode([data]).first
+          data = data.to_a.map{|x| x.join("=")}.join(", ")
+          @client.execute "UPDATE #{@id} SET #{data} WHERE ROWID = '#{row_id}'"
         end
         
+        # delete row
+        def delete row_id
+          @client.execute "DELETE FROM #{@id} WHERE rowid='#{row_id}'"
+        end
+        
+        # delete all rows
+        def truncate!
+          @client.execute "DELETE FROM #{@id}"
+        end
         
         def get_headers
           @headers ||= describe
@@ -129,19 +127,20 @@ module GData
             ar      
           end
         end  
-                
+                        
         # 
         # Returns datatype of given column name
         #
         def get_datatype column_name
           get_headers
-          
           @headers.each do |h|
-            return h[:type] if h[:name] == column_name.to_s
+            return h[:type] if h[:name].force_encoding('utf-8') == column_name.to_s
           end            
-          raise ArgumentError "The column doesn't exist"
+          raise ArgumentError, "The column #{column_name} doesn't exist"
         end      
       end
     end
   end
 end
+
+

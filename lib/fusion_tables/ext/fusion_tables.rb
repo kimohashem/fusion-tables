@@ -15,16 +15,22 @@
 module GData
   module Client
     class FusionTables < Base    
+                     
+      # Helper method to run FT SQL and return FT data object
+      def execute(sql)        
+        http_req = sql.upcase.match(/^(DESCRIBE|SHOW|SELECT)/) ? :sql_get : :sql_post
+        GData::Client::FusionTables::Data.parse(self.send(http_req, sql)).body                    
+      end                                                   
                           
       # Show a list of fusion tables
       def show_tables 
-        data = GData::Client::FusionTables::Data.parse(self.sql_get("SHOW TABLES"))
+        data = self.execute "SHOW TABLES"
+        
         data.inject([]) do |x, row|
           x << GData::Client::FusionTables::Table.new(self, row)        
           x
         end  
       end
-
             
       # Create a new table. Return the corresponding table
       # 
@@ -41,7 +47,8 @@ module GData
         
         # Sanity check name
         table_name = table_name.strip.gsub(/ /,'_')
-        
+        # surrounded the table_name with '' to support the non latin languages
+        table_name = "'"+table_name+"'"
         # ensure all column types are valid
         columns.each do |col|
           if !DATATYPES.include? col[:type].downcase
@@ -62,6 +69,32 @@ module GData
         table = GData::Client::FusionTables::Table.new(self, :table_id => table_id, :name => table_name)
         table.get_headers
         table
+      end
+      
+      def create_view(table_id, view_name, columns, filter)
+        # Sanity check name
+        view_name = view_name.strip.gsub(/ /,'_')
+        # surrounded the table_name with '' to support the non latin languages
+        view_name = "'"+view_name+"'"
+        # ensure all column types are valid
+        #columns.each do |col|
+          #if !DATATYPES.include? col[:type].downcase
+            #raise ArgumentError, "Ensure input types are: 'number', 'string', 'location' or 'datetime'"
+          #end  
+        #end
+        
+        # generate sql
+        fields = columns.collect{|x| "'"+x+"'"}.join(", ")
+        sql = "CREATE VIEW #{view_name} AS (SELECT #{fields} FROM #{table_id})"
+        unless filter.empty?
+          filter = filter.map{ |col| "'#{col[:name]}' = '#{col[:value]}'" }.join(" AND ")
+          sql = "CREATE VIEW #{view_name} AS (SELECT #{fields} FROM #{table_id} WHERE #{filter})"
+        else
+          sql = "CREATE VIEW #{view_name} AS (SELECT #{fields} FROM #{table_id})"
+        end
+        # create view        
+        resp = self.sql_post(sql)
+        raise "unknown column type" if resp.body == "Unknown column type."
       end
       
       # Drops Fusion Tables
