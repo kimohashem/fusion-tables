@@ -76,12 +76,7 @@ module GData
         view_name = view_name.strip.gsub(/ /,'_')
         # surrounded the table_name with '' to support the non latin languages
         view_name = "'"+view_name+"'"
-        # ensure all column types are valid
-        #columns.each do |col|
-          #if !DATATYPES.include? col[:type].downcase
-            #raise ArgumentError, "Ensure input types are: 'number', 'string', 'location' or 'datetime'"
-          #end  
-        #end
+
         
         # generate sql
         fields = columns.collect{|x| "'"+x+"'"}.join(", ")
