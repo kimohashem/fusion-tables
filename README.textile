@@ -1,6 +1,6 @@
 h1. fusion-tables
 
-This gem lets you easily interact with Google Fusion Tables from your Ruby application. Here is a "live visualisation of london bike hire availability":http://tables.googlelabs.com/DataSource?snapid=78314 and some "example maps and charts":http://www.tokumine.com/2010/08/10/fusion-tables-gem/.
+This gem lets you easily interact with Google Fusion Tables from your Ruby application.
 
 h2. Gem Dependencies
 
@@ -8,7 +8,7 @@ h2. Gem Dependencies
 
 h2. Installation
 
-bc. gem install fusion_tables
+bc. gem install google_fusion_tables
 
 h2. Rubies
 
@@ -19,11 +19,11 @@ Tested on:
 
 h2. To Use
 
-bc. require 'fusion_tables'
+bc. require 'google_fusion_tables'
 
 or in Rails 2.3.x
 
-bc. config.gem 'fusion_tables'
+bc. config.gem 'google_fusion_tables'
 
 h2. API examples
  
@@ -166,11 +166,13 @@ h2. Note on Patches/Pull Requests
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
+h2. Acknowledgments
+
+A huge thank you to: Tom Verbeure, Simon Tokumine
+
 h2. Copyright
 
-Largely based on Tom Verbeure's work for MTBGuru: http://code.google.com/p/mtbguru-fusiontables/
-
-Copyright (c) 2010 Tom Verbeure, Simon Tokumine. See LICENSE for details.
+Copyright (c) 2011 Kareem Hashem. See LICENSE for details.
 
 
 

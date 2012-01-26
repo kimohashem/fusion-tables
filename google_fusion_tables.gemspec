@@ -8,14 +8,13 @@ Gem::Specification.new do |s|
   s.version = "1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Kareem Hashem", "Simon Tokumine", "Tom Verbeure"]
-  s.date = %q{2010-09-02}
+  s.author = ["Kareem Hashem"]
+  s.date = %q{2011-01-26}
   s.description = %q{A simple Google Fusion Tables API wrapper. Supports bulk inserts and most API functions}
-  s.email = ["eng.kareem.hashem@gmail.com","simon@tinypla.net"]
+  s.email = %q{eng.kareem.hashem@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.textile",
-     "TODO"
+     "README.textile"
   ]
   s.files = [
     ".document",
@@ -23,7 +22,6 @@ Gem::Specification.new do |s|
      "LICENSE",
      "README.textile",
      "Rakefile",
-     "TODO",
      "VERSION",
      "examples/compare_tweets.rb",
      "examples/credentials.example.yml",
