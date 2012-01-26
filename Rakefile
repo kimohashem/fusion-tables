@@ -4,12 +4,12 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "fusion_tables"
+    gem.name = "google_fusion_tables"
     gem.summary = %Q{Google Fusion Tables API wrapper}
     gem.description = %Q{A simple Google Fusion Tables API wrapper. Supports bulk inserts and most API functions}
-    gem.email = "simon@tinypla.net"
-    gem.homepage = "http://github.com/tokumine/fusion-tables"
-    gem.authors = ["Simon Tokumine", "Tom Verbeure"]
+    gem.email = "eng.kareem.hashem@gmail.com"
+    gem.homepage = "http://github.com/kimohashem/fusion-tables"
+    gem.authors = ["Kareem Hashem"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     gem.add_dependency "gdata_19", ">= 1.1.2"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings

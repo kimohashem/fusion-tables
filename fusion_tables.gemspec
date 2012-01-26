@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version = "1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.author = ["Kareem Hashem"]
+  s.authors = ["Kareem Hashem"]
   s.date = %q{2011-01-26}
   s.description = %q{A simple Google Fusion Tables API wrapper. Supports bulk inserts and most API functions}
   s.email = %q{eng.kareem.hashem@gmail.com}
