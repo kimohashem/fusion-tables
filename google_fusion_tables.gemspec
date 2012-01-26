@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{fusion_tables}
-  s.version = "0.2.2"
+  s.name = %q{google_fusion_tables}
+  s.version = "1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Simon Tokumine", "Tom Verbeure"]
+  s.authors = ["Kareem Hashem", "Simon Tokumine", "Tom Verbeure"]
   s.date = %q{2010-09-02}
   s.description = %q{A simple Google Fusion Tables API wrapper. Supports bulk inserts and most API functions}
-  s.email = %q{simon@tinypla.net}
+  s.email = ["eng.kareem.hashem@gmail.com","simon@tinypla.net"]
   s.extra_rdoc_files = [
     "LICENSE",
      "README.textile",
@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
      "test/test_ext.rb",
      "test/test_table.rb"
   ]
-  s.homepage = %q{http://github.com/tokumine/fusion-tables}
+  s.homepage = %q{http://github.com/kimohashem/fusion-tables}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
